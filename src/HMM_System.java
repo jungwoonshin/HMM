@@ -12,11 +12,11 @@ import java.text.DecimalFormat;
 
 public class HMM_System {
 	public static void main(String[] args) {
-//		args = new String[3];
-//		args[0] = "./statepath";
-//		args[1] ="/Users/jungwoonshin/javaide/workspace/HMM/src/sentence.hmm";
-//		args[2] = "/Users/jungwoonshin/javaide/workspace/HMM/src/example2.obs";
-//		args[3] = "/Users/jungwoonshin/git/cs440/src/p03/output.txt";
+		args = new String[4];
+		args[0] = "./optimize";
+		args[1] ="/Users/jungwoonshin/javaide/workspace/HMM/src/sentence.hmm";
+		args[2] = "/Users/jungwoonshin/javaide/workspace/HMM/src/example2.obs";
+		args[3] = "/Users/jungwoonshin/git/cs440/src/p03/output.txt";
 
 		int i = 0;
 		int N = 0;
@@ -123,8 +123,6 @@ public class HMM_System {
 					} else {
 						File output = new File(args[3]);
 
-						// Compute probability before optimization
-//						double[] probBefore = recognizeAux(obs, N, vocabList, matrixA, matrixB, matrixPI);
 
 						// Optimize and extract updated matrices
 						optimize(obs, vocabList, stateList, N, M, T, matrixA, matrixB, matrixPI,  output);
@@ -176,6 +174,7 @@ public class HMM_System {
 		int dataset_length = Integer.parseInt(sCurrentLine);
 
 		double[][] alpha;
+		@SuppressWarnings("unused")
 		double[][] beta;
 
 		int numWords = 0;
@@ -219,6 +218,7 @@ public class HMM_System {
 		int dataset_length = Integer.parseInt(sCurrentLine);
 
 		double[][] alpha;
+		@SuppressWarnings("unused")
 		double[][] beta;
 
 		int numWords = 0;
@@ -247,7 +247,7 @@ public class HMM_System {
 		br.close();
 		return ret;
 	}
-	
+
 	/**************************************************** STATEPATH ****************************************************/
 
 
@@ -261,7 +261,9 @@ public class HMM_System {
 		String sCurrentLine = br.readLine();
 		int dataset_length = Integer.parseInt(sCurrentLine);
 
+		@SuppressWarnings("unused")
 		double[][] alpha;
+		@SuppressWarnings("unused")
 		double[][] beta;
 
 		int numWords = 0;
@@ -329,7 +331,7 @@ public class HMM_System {
 		double[][] alpha;
 		double[][] beta;
 		int numWords = 0;
-//		System.out.println("dataset_length: " + dataset_length);
+		//		System.out.println("dataset_length: " + dataset_length);
 		for (int dataSetIndex = 0; dataSetIndex < dataset_length; dataSetIndex++) {
 			if ((sCurrentLine = br.readLine()) != null) {
 				numWords = Integer.parseInt(sCurrentLine);
@@ -418,7 +420,7 @@ public class HMM_System {
 		for (int state = 0; state < N; state++) {
 			unoptimized += alpha[numWords - 1][state];
 		}
-		
+
 		alpha = getAlpha(N, trained_a_matrix, trained_b_matrix, pi_matrix, numWords, obsIndex);
 		beta = getBeta(N, trained_a_matrix, trained_b_matrix, numWords, obsIndex);
 
@@ -427,8 +429,8 @@ public class HMM_System {
 			optimized += alpha[numWords - 1][state];
 		}
 		System.out.println(unoptimized + " " +optimized);
-		//		printMatrix(a_matrix, "Matrix A after optimization");
-		//		printMatrix(b_matrix, "Matrix B after optimization");
+//		printMatrix(a_matrix, "Matrix A after optimization");
+//		printMatrix(b_matrix, "Matrix B after optimization");
 
 		//		recognize(obsFilename, N,vocabList,a_matrix,b_matrix,pi_matrix);
 
@@ -561,8 +563,8 @@ public class HMM_System {
 
 		//        double[][] alpha = new double[numWords][N];
 		//        // Step : t = 1
-				//        for (int state = 0; state < N; state++) {
-					//            alpha[0][state] = pi_matrix[state] * b_matrix[state][obsIndex[0]];
+		//        for (int state = 0; state < N; state++) {
+		//            alpha[0][state] = pi_matrix[state] * b_matrix[state][obsIndex[0]];
 		//        }
 		//
 		//        // Step : t = 2
@@ -613,7 +615,7 @@ public class HMM_System {
 		//
 		//        // Initialization
 		//        for (int i = 0; i < N; i++) {
-			//            beta[numWords - 1][i] = 1.0;
+		//            beta[numWords - 1][i] = 1.0;
 		//        }
 		//
 		//        // Induction
