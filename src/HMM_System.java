@@ -1,14 +1,3 @@
-/*
- * CS440/640 Artificial Intelligence Spring 2015
- * Programming Assignment #3
- * 
- * Final Version
- *
- * Team: Marika Lee, Jungwoon Shin, and Masaya Ando
- * Date: April 3, 2015
- * 
- * File: HMM_System.java
- */
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
