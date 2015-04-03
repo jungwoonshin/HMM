@@ -15,7 +15,7 @@ public class HMM_System {
 		args = new String[4];
 		args[0] = "./optimize";
 		args[1] ="/Users/jungwoonshin/javaide/workspace/HMM/src/sentence.hmm";
-		args[2] = "/Users/jungwoonshin/javaide/workspace/HMM/src/example2.obs";
+		args[2] = "/Users/jungwoonshin/javaide/workspace/HMM/src/example1.obs";
 		args[3] = "/Users/jungwoonshin/git/cs440/src/p03/output.txt";
 
 		int i = 0;
@@ -429,8 +429,8 @@ public class HMM_System {
 			optimized += alpha[numWords - 1][state];
 		}
 		System.out.println(unoptimized + " " +optimized);
-//		printMatrix(a_matrix, "Matrix A after optimization");
-//		printMatrix(b_matrix, "Matrix B after optimization");
+		//		printMatrix(a_matrix, "Matrix A after optimization");
+		//		printMatrix(b_matrix, "Matrix B after optimization");
 
 		//		recognize(obsFilename, N,vocabList,a_matrix,b_matrix,pi_matrix);
 
@@ -545,44 +545,22 @@ public class HMM_System {
 	 */
 	public static double[][] getAlpha(int N, double[][] a_matrix, double[][] b_matrix, double[] pi_matrix, int numWords, int[] obsIndex) {
 		double[][] alpha = new double[numWords][N];
-
-		for (int t = 0; t < numWords; t++) {
-			for (int i = 0; i < N; i++) {
-				if (t == 0) {
-					alpha[t][i] = pi_matrix[i] * b_matrix[i][obsIndex[0]];
-				} else {
-					for (int j = 0; j < N; j++) {
-						alpha[t][i] += alpha[t-1][j] * a_matrix[j][i];
-					}
-					alpha[t][i] *= b_matrix[i][obsIndex[t]];
-				}
-			}
+		// Step : t = 1
+		for (int state = 0; state < N; state++) {
+			alpha[0][state] = pi_matrix[state] * b_matrix[state][obsIndex[0]];
 		}
 
-		return alpha;
+		// Step : t = 2
+		for (int t = 1; t < numWords; t++) {
+			for (int l = 0; l < N; l++) {
+				for (int k = 0; k < N; k++) {
+					alpha[t][l] += alpha[t - 1][k] * a_matrix[k][l];
+				}
+				alpha[t][l] *= b_matrix[l][obsIndex[t]];
 
-		//        double[][] alpha = new double[numWords][N];
-		//        // Step : t = 1
-		//        for (int state = 0; state < N; state++) {
-		//            alpha[0][state] = pi_matrix[state] * b_matrix[state][obsIndex[0]];
-		//        }
-		//
-		//        // Step : t = 2
-		//        for (int t = 1; t < numWords; t++) {
-		//            for (int l = 0; l < N; l++) {
-		//                for (int k = 0; k < N; k++) {
-		//                    alpha[t][l] += alpha[t - 1][k] * a_matrix[k][l];
-		//                }
-		//            }
-		//        }
-		//
-		//        for (int t = 1; t < numWords; t++) {
-		//            for (int j = 0; j < N; j++) {
-		//                alpha[t][j] *= b_matrix[j][obsIndex[t]];
-		//            }
-		//        }
-		//        
-		//        return alpha;
+			}
+		}
+		return alpha;
 	}
 
 	/*
@@ -591,8 +569,8 @@ public class HMM_System {
 	 * @return  double[][]
 	 */
 	public static double[][] getBeta(int N, double[][] a_matrix, double[][] b_matrix, int numWords, int[] obsIndex) {
+		/*
 		double[][] beta = new double[numWords][N];
-
 		for (int t = numWords; t > 0; t--) {
 			for (int i = 0; i < N; i++) {
 				if (t == numWords) {
@@ -605,29 +583,27 @@ public class HMM_System {
 
 			}
 		}
-
 		return beta;
+		 */
+		double[][] beta;
+		beta = new double[numWords][N];
 
-		//        double[][] beta;
-		//        beta = new double[numWords][N];
-		//
-		//
-		//
-		//        // Initialization
-		//        for (int i = 0; i < N; i++) {
-		//            beta[numWords - 1][i] = 1.0;
-		//        }
-		//
-		//        // Induction
-		//        for (int t = numWords - 2; t >= 0; t--) {
-		//            for (int i = 0; i < N; i++) {
-		//                double sum = 0.0;
-		//                for (int j = 0; j < N; j++) {
-		//                    sum += a_matrix[i][j] * b_matrix[j][obsIndex[t + 1]] * beta[t + 1][j];
-		//                }
-		//                beta[t][i] = sum;
-		//            }
-		//        }
+		// Initialization
+		for (int i = 0; i < N; i++) {
+			beta[numWords - 1][i] = 1.0;
+		}
+
+		// Induction
+		for (int t = numWords - 2; t >= 0; t--) {
+			for (int i = 0; i < N; i++) {
+				double sum = 0.0;
+				for (int j = 0; j < N; j++) {
+					sum += a_matrix[i][j] * b_matrix[j][obsIndex[t + 1]] * beta[t + 1][j];
+				}
+				beta[t][i] = sum;
+			}
+		}
+		return beta;
 	}
 
 	/*
